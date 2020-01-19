@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -23,7 +24,7 @@ type FileItem struct {
 }
 
 func home(writer http.ResponseWriter, req *http.Request) {
-	path := req.FormValue("path")
+	path, _ := url.QueryUnescape(req.FormValue("path"))
 	if path == "" {
 		path = basePath
 	}
@@ -69,7 +70,7 @@ func home(writer http.ResponseWriter, req *http.Request) {
 }
 
 func thumbnail(w http.ResponseWriter, req *http.Request) {
-	path := req.FormValue("path")
+	path, _ := url.QueryUnescape(req.FormValue("path"))
 	if path == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		return
